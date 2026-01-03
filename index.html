@@ -2,81 +2,69 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Pre-Test E-Modul Mitigasi Bencana</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- STYLE -->
+  <title>SOAL PRE-TEST E-MODUL MITIGASI BENCANA</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+<div class="container">
+
   <!-- ================= HALAMAN IDENTITAS ================= -->
   <section id="page-identitas">
-    <div class="container">
-      <h1>Pre-Test E-Modul Mitigasi Bencana</h1>
-      <p>Silakan isi identitas dengan benar sebelum mengerjakan soal.</p>
+    <h1>SOAL PRE-TEST E-MODUL<br>MITIGASI BENCANA</h1>
 
-      <form id="formIdentitas">
-        <label>Nama Lengkap</label>
-        <input type="text" id="nama" required>
+    <form id="formIdentitas">
+      <label>Nama Lengkap</label>
+      <input type="text" id="nama" required>
 
-        <label>Kelas</label>
-        <input type="text" id="kelas" required>
+      <label>Kelas</label>
+      <input type="text" id="kelas" required>
 
-        <label>Nama Sekolah</label>
-        <input type="text" id="sekolah" required>
+      <label>Sekolah</label>
+      <input type="text" id="sekolah" required>
 
-        <label>Tanggal Pengerjaan</label>
-        <input type="date" id="submit" required>
+      <label>Tanggal Pengerjaan</label>
+      <input type="date" id="submit" required>
 
-        <button type="submit">Mulai Pre-Test</button>
-      </form>
-    </div>
+      <button type="submit">Mulai Pre-Test</button>
+    </form>
   </section>
 
   <!-- ================= HALAMAN KUIS ================= -->
   <section id="page-kuis" class="hidden">
-    <div class="container">
-      <div class="header-kuis">
-        <div id="progress">Soal 1 / 20</div>
-        <div id="timer">00:00</div>
-      </div>
 
-      <div id="soal-box">
-        <!-- Soal akan di-render oleh JavaScript -->
-      </div>
-
-      <div class="navigasi">
-        <button id="btnNext">Soal Berikutnya</button>
-      </div>
+    <div class="kuis-header">
+      <div id="progress">Soal 1 / 20</div>
+      <div id="timer">00:00</div>
     </div>
+
+    <div id="soal-box"></div>
+
+    <button id="btnNext">Soal Berikutnya</button>
   </section>
 
   <!-- ================= HALAMAN HASIL ================= -->
   <section id="page-hasil" class="hidden">
-    <div class="container">
-      <h2>Hasil Pre-Test</h2>
+    <h2>Hasil Pre-Test</h2>
 
-      <div class="ringkasan">
-        <p><strong>Nama:</strong> <span id="rNama"></span></p>
-        <p><strong>Kelas:</strong> <span id="rKelas"></span></p>
-        <p><strong>Sekolah:</strong> <span id="rSekolah"></span></p>
-        <p><strong>Tanggal:</strong> <span id="rSubmit"></span></p>
-
-        <hr>
-
-        <p><strong>Jawaban Benar:</strong> <span id="rBenar"></span></p>
-        <p><strong>Jawaban Salah:</strong> <span id="rSalah"></span></p>
-        <p><strong>Skor:</strong> <span id="rSkor"></span></p>
-      </div>
-
-      <button id="btnKirim">Simpan & Kirim Jawaban</button>
-
-      <p id="statusKirim"></p>
+    <div class="hasil-box">
+      <p>Nama: <span id="rNama"></span></p>
+      <p>Kelas: <span id="rKelas"></span></p>
+      <p>Sekolah: <span id="rSekolah"></span></p>
+      <p>Tanggal: <span id="rSubmit"></span></p>
+      <hr style="margin:10px 0">
+      <p>Jawaban Benar: <span id="rBenar"></span></p>
+      <p>Jawaban Salah: <span id="rSalah"></span></p>
+      <p>Skor: <span id="rSkor"></span></p>
     </div>
+
+    <button id="btnKirim">Selesai & Kirim Jawaban</button>
+    <div id="statusKirim"></div>
   </section>
 
-  <!-- SCRIPT -->
-  <script src="script.js"></script>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
