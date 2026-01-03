@@ -10,7 +10,7 @@
 
 <div class="container">
 
-  <!-- ================= HALAMAN IDENTITAS ================= -->
+  <!-- IDENTITAS -->
   <section id="page-identitas">
     <h1>SOAL PRE-TEST E-MODUL<br>MITIGASI BENCANA</h1>
 
@@ -31,20 +31,18 @@
     </form>
   </section>
 
-  <!-- ================= HALAMAN KUIS ================= -->
+  <!-- KUIS -->
   <section id="page-kuis" class="hidden">
-
     <div class="kuis-header">
       <div id="progress">Soal 1 / 20</div>
       <div id="timer">00:00</div>
     </div>
 
     <div id="soal-box"></div>
-
     <button id="btnNext">Soal Berikutnya</button>
   </section>
 
-  <!-- ================= HALAMAN HASIL ================= -->
+  <!-- HASIL -->
   <section id="page-hasil" class="hidden">
     <h2>Hasil Pre-Test</h2>
 
@@ -53,16 +51,24 @@
       <p>Kelas: <span id="rKelas"></span></p>
       <p>Sekolah: <span id="rSekolah"></span></p>
       <p>Tanggal: <span id="rSubmit"></span></p>
-      <hr style="margin:10px 0">
+      <hr>
       <p>Jawaban Benar: <span id="rBenar"></span></p>
       <p>Jawaban Salah: <span id="rSalah"></span></p>
-      <p>Skor: <span id="rSkor"></span></p>
+      <p>Skor:</p>
+      <div class="skor-besar" id="rSkor"></div>
     </div>
 
     <button id="btnKirim">Selesai & Kirim Jawaban</button>
-    <div id="statusKirim"></div>
   </section>
 
+</div>
+
+<!-- POPUP -->
+<div id="overlay" class="hidden">
+  <div class="popup">
+    <div class="loader"></div>
+    <p id="popupText">Mengirim jawaban...</p>
+  </div>
 </div>
 
 <script src="script.js"></script>
