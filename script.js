@@ -5,7 +5,6 @@ let benar = 0;
 let salah = 0;
 let jawabanDipilih = null;
 
-/* ================== DATA SOAL ================== */
 const soalData = [
   {
     soal: "Indonesia memiliki tingkat kerawanan bencana tinggi karena kondisi tektoniknya. Faktor utama yang memengaruhi kondisi tersebut adalah …",
