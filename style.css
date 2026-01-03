@@ -1,66 +1,250 @@
+/* =====================
+   RESET & GLOBAL
+===================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 body {
-  font-family: Arial, sans-serif;
-  background: #f2f5f9;
-  padding: 30px;
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  background: linear-gradient(135deg, #e8f5e9, #e3f2fd);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  color: #1f2937;
 }
 
+/* =====================
+   CONTAINER / CARD
+===================== */
+.container,
 .card {
-  max-width: 600px;
-  margin: auto;
-  background: white;
-  padding: 25px;
-  border-radius: 14px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-}
-
-h2, h3 {
-  margin-bottom: 15px;
-}
-
-input, button {
   width: 100%;
-  padding: 12px;
-  margin-top: 10px;
-  font-size: 14px;
+  max-width: 720px;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 28px 26px 32px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.12);
+  animation: fadeIn 0.6s ease;
 }
 
+/* =====================
+   ANIMATION
+===================== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =====================
+   HEADINGS
+===================== */
+h1,
+h2 {
+  text-align: center;
+  margin-bottom: 18px;
+  font-weight: 700;
+}
+
+h1 {
+  font-size: 1.6rem;
+  color: #0f766e;
+}
+
+h2 {
+  font-size: 1.3rem;
+  color: #065f46;
+}
+
+#progress {
+  text-align: center;
+  font-size: 0.95rem;
+  margin-bottom: 14px;
+  color: #2563eb;
+  font-weight: 600;
+}
+
+/* =====================
+   FORM AWAL
+===================== */
+input {
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  border-radius: 10px;
+  border: 1.6px solid #cbd5e1;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+}
+
+input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+}
+
+/* =====================
+   BUTTON
+===================== */
 button {
-  background: #2e7d32;
-  color: white;
+  width: 100%;
+  padding: 14px;
+  margin-top: 12px;
+  border-radius: 12px;
   border: none;
-  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
+  background: linear-gradient(135deg, #16a34a, #22c55e);
+  color: #ffffff;
+  transition: all 0.25s ease;
 }
 
 button:hover {
-  background: #1b5e20;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(34, 197, 94, 0.35);
 }
 
+button:active {
+  transform: scale(0.98);
+}
+
+/* =====================
+   SOAL
+===================== */
+#soal {
+  font-size: 1.05rem;
+  line-height: 1.55;
+  margin-bottom: 18px;
+  font-weight: 600;
+}
+
+/* =====================
+   OPSI JAWABAN
+===================== */
 .opsi {
-  border: 1px solid #ccc;
-  padding: 12px;
-  margin-top: 10px;
-  border-radius: 8px;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 12px;
   cursor: pointer;
-  color: #222;
+  font-size: 0.95rem;
+  background: #ffffff;
+  color: #1f2937; /* ⬅️ PENTING: BUKAN PUTIH */
+  transition: all 0.2s ease;
 }
 
 .opsi:hover {
-  background: #e8f5e9;
+  border-color: #60a5fa;
+  background: #eff6ff;
 }
 
-.top {
-  margin-bottom: 10px;
-  font-weight: bold;
+.opsi.aktif {
+  border-color: #22c55e;
+  background: #dcfce7;
+  color: #14532d;
+  font-weight: 600;
 }
 
+/* =====================
+   LOADING OVERLAY
+===================== */
 #loading {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.6);
-  color: white;
-  font-size: 18px;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 1000;
   align-items: center;
   justify-content: center;
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+#loading::before {
+  content: "";
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 5px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #22c55e;
+  animation: spin 1s linear infinite;
+  margin-right: 14px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =====================
+   POPUP
+===================== */
+#popup {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+}
+
+.popup-box {
+  background: #ffffff;
+  width: 90%;
+  max-width: 380px;
+  border-radius: 16px;
+  padding: 26px 22px;
+  text-align: center;
+  animation: fadeIn 0.4s ease;
+}
+
+.popup-box h3 {
+  font-size: 1.3rem;
+  color: #16a34a;
+  margin-bottom: 10px;
+}
+
+.popup-box p {
+  font-size: 0.95rem;
+  margin-bottom: 18px;
+  color: #334155;
+}
+
+/* =====================
+   HIDDEN
+===================== */
+.hidden {
+  display: none;
+}
+
+/* =====================
+   RESPONSIVE
+===================== */
+@media (max-width: 480px) {
+  .container,
+  .card {
+    padding: 22px 18px 26px;
+  }
+
+  h1 {
+    font-size: 1.35rem;
+  }
+
+  #soal {
+    font-size: 1rem;
+  }
 }
