@@ -171,110 +171,77 @@ let jawaban = [];
 let timer = 0;
 let interval;
 
-/* ================== ELEMEN ================== */
-const pageIdentitas = document.getElementById("page-identitas");
-const pageKuis = document.getElementById("page-kuis");
-const pageHasil = document.getElementById("page-hasil");
-const soalBox = document.getElementById("soal-box");
-const progress = document.getElementById("progress");
-const timerEl = document.getElementById("timer");
+const pageI=document.getElementById("page-identitas");
+const pageQ=document.getElementById("page-kuis");
+const pageH=document.getElementById("page-hasil");
+const soalBox=document.getElementById("soal-box");
 
-/* ================== FORM IDENTITAS ================== */
-document.getElementById("formIdentitas").addEventListener("submit", e => {
-  e.preventDefault();
-  pageIdentitas.classList.add("hidden");
-  pageKuis.classList.remove("hidden");
-  mulaiTimer();
-  renderSoal();
-});
+document.getElementById("formIdentitas").onsubmit=e=>{
+ e.preventDefault();
+ pageI.classList.add("hidden");
+ pageQ.classList.remove("hidden");
+ mulaiTimer(); render();
+};
 
-/* ================== TIMER ================== */
-function mulaiTimer() {
-  interval = setInterval(() => {
-    timer++;
-    const m = String(Math.floor(timer / 60)).padStart(2, "0");
-    const s = String(timer % 60).padStart(2, "0");
-    timerEl.textContent = `${m}:${s}`;
-  }, 1000);
+function mulaiTimer(){
+ interval=setInterval(()=>{
+  timer++;
+  timerEl.textContent=
+   String(Math.floor(timer/60)).padStart(2,"0")+":"+
+   String(timer%60).padStart(2,"0");
+ },1000);
 }
 
-/* ================== RENDER SOAL ================== */
-function renderSoal() {
-  const s = soalData[indexSoal];
-  progress.textContent = `Soal ${indexSoal + 1} / 20`;
-
-  soalBox.innerHTML = `
-    <h3>${indexSoal + 1}. ${s.soal}</h3>
-    ${["A","B","C","D"].map(o => `
-      <button class="opsi" onclick="pilihJawaban('${o}')">
-        ${o}. ${s[o]}
-      </button>
-    `).join("")}
-  `;
+function render(){
+ progress.textContent=`Soal ${i+1} / 20`;
+ const s=soalData[i];
+ soalBox.innerHTML=`<h3>${i+1}. ${s.soal}</h3>`+
+ ["A","B","C","D"].map(o=>`
+  <button class="opsi" onclick="pilih('${o}')">${o}. ${s[o]}</button>
+ `).join("");
 }
 
-/* ================== PILIH JAWABAN ================== */
-function pilihJawaban(pilih) {
-  jawaban[indexSoal] = pilih;
-  const benar = soalData[indexSoal].kunci;
-
-  document.querySelectorAll(".opsi").forEach(btn => {
-    btn.disabled = true;
-    if (btn.textContent.trim().startsWith(benar)) btn.classList.add("benar");
-    if (btn.textContent.trim().startsWith(pilih) && pilih !== benar) btn.classList.add("salah");
-  });
+function pilih(p){
+ jawaban[i]=p;
+ document.querySelectorAll(".opsi").forEach(b=>{
+  b.disabled=true;
+  if(b.textContent.startsWith(soalData[i].kunci)) b.classList.add("benar");
+  if(b.textContent.startsWith(p)&&p!==soalData[i].kunci) b.classList.add("salah");
+ });
 }
 
-/* ================== NEXT ================== */
-document.getElementById("btnNext").addEventListener("click", () => {
-  if (jawaban[indexSoal] === undefined) return alert("Pilih jawaban terlebih dahulu.");
-  indexSoal++;
-  if (indexSoal < soalData.length) {
-    renderSoal();
-  } else {
-    selesai();
-  }
-});
+btnNext.onclick=()=>{
+ if(!jawaban[i]) return alert("Pilih jawaban terlebih dahulu");
+ i++;
+ i<soalData.length?render():selesai();
+};
 
-/* ================== SELESAI ================== */
-function selesai() {
-  clearInterval(interval);
-  pageKuis.classList.add("hidden");
-  pageHasil.classList.remove("hidden");
-
-  let benar = 0;
-  jawaban.forEach((j, i) => {
-    if (j === soalData[i].kunci) benar++;
-  });
-
-  const salah = 20 - benar;
-  const skor = benar * 5;
-
-  document.getElementById("rNama").textContent = nama.value;
-  document.getElementById("rKelas").textContent = kelas.value;
-  document.getElementById("rSekolah").textContent = sekolah.value;
-  document.getElementById("rSubmit").textContent = submit.value;
-  document.getElementById("rBenar").textContent = benar;
-  document.getElementById("rSalah").textContent = salah;
-  document.getElementById("rSkor").textContent = skor;
-
-  document.getElementById("btnKirim").onclick = () => kirimData(benar, salah, skor);
+function selesai(){
+ clearInterval(interval);
+ pageQ.classList.add("hidden");
+ pageH.classList.remove("hidden");
+ let benar=jawaban.filter((j,x)=>j===soalData[x].kunci).length;
+ rNama.textContent=nama.value;
+ rKelas.textContent=kelas.value;
+ rSekolah.textContent=sekolah.value;
+ rSubmit.textContent=submit.value;
+ rBenar.textContent=benar;
+ rSalah.textContent=20-benar;
+ rSkor.textContent=benar*5;
+ btnKirim.onclick=()=>kirim(benar,20-benar,benar*5);
 }
 
-/* ================== KIRIM DATA ================== */
-function kirimData(benar, salah, skor) {
-  fetch(WEB_APP_URL, {
-    method: "POST",
-    body: JSON.stringify({
-      nama: nama.value,
-      kelas: kelas.value,
-      sekolah: sekolah.value,
-      submit: submit.value,
-      benar,
-      salah,
-      skor
-    })
-  })
-  .then(() => document.getElementById("statusKirim").textContent = "Jawaban berhasil disimpan.")
-  .catch(() => document.getElementById("statusKirim").textContent = "Gagal mengirim data.");
+function kirim(benar,salah,skor){
+ overlay.classList.remove("hidden");
+ popupText.textContent="Mengirim jawaban...";
+ fetch(WEB_APP_URL,{
+  method:"POST",
+  body:JSON.stringify({nama:nama.value,kelas:kelas.value,sekolah:sekolah.value,submit:submit.value,benar,salah,skor})
+ }).then(()=>{
+  popupText.textContent="✅ Jawaban berhasil dikirim";
+  setTimeout(()=>overlay.classList.add("hidden"),1800);
+ }).catch(()=>{
+  popupText.textContent="❌ Gagal mengirim data";
+  setTimeout(()=>overlay.classList.add("hidden"),2000);
+ });
 }
