@@ -2,73 +2,51 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SOAL PRE-TEST E-MODUL MITIGASI BENCANA</title>
+  <title>Quiz Interaktif</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="container">
-
-  <!-- IDENTITAS -->
-  <section id="page-identitas">
-    <h1>SOAL PRE-TEST E-MODUL<br>MITIGASI BENCANA</h1>
-
-    <form id="formIdentitas">
-      <label>Nama Lengkap</label>
-      <input type="text" id="nama" required>
-
-      <label>Kelas</label>
-      <input type="text" id="kelas" required>
-
-      <label>Sekolah</label>
-      <input type="text" id="sekolah" required>
-
-      <label>Tanggal Pengerjaan</label>
-      <input type="date" id="submit" required>
-
-      <button type="submit">Mulai Pre-Test</button>
-    </form>
-  </section>
-
-  <!-- KUIS -->
-  <section id="page-kuis" class="hidden">
-    <div class="kuis-header">
-      <div id="progress">Soal 1 / 20</div>
-      <div id="timer">00:00</div>
-    </div>
-
-    <div id="soal-box"></div>
-    <button id="btnNext">Soal Berikutnya</button>
-  </section>
-
-  <!-- HASIL -->
-  <section id="page-hasil" class="hidden">
-    <h2>Hasil Pre-Test</h2>
-
-    <div class="hasil-box">
-      <p>Nama: <span id="rNama"></span></p>
-      <p>Kelas: <span id="rKelas"></span></p>
-      <p>Sekolah: <span id="rSekolah"></span></p>
-      <p>Tanggal: <span id="rSubmit"></span></p>
-      <hr>
-      <p>Jawaban Benar: <span id="rBenar"></span></p>
-      <p>Jawaban Salah: <span id="rSalah"></span></p>
-      <p>Skor:</p>
-      <div class="skor-besar" id="rSkor"></div>
-    </div>
-
-    <button id="btnKirim">Selesai & Kirim Jawaban</button>
-  </section>
-
+<!-- LOADING (HIDDEN DI AWAL) -->
+<div id="loading">
+  <div class="spinner"></div>
+  <p>Mengirim jawaban...</p>
 </div>
 
 <!-- POPUP -->
-<div id="overlay" class="hidden">
-  <div class="popup">
-    <div class="loader"></div>
-    <p id="popupText">Mengirim jawaban...</p>
+<div id="popup">
+  <div class="popup-box">
+    <h3 id="popup-title"></h3>
+    <p id="popup-message"></p>
+    <button onclick="closePopup()">OK</button>
   </div>
+</div>
+
+<div class="container">
+
+  <!-- FORM IDENTITAS -->
+  <div id="formAwal">
+    <h2>Identitas Peserta</h2>
+    <input id="nama" placeholder="Nama Lengkap">
+    <input id="kelas" placeholder="Kelas">
+    <input id="sekolah" placeholder="Nama Sekolah">
+    <input id="tanggal" type="date">
+    <button onclick="mulai()">Mulai Soal</button>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="quiz" class="hidden">
+    <div class="header">
+      <span id="progress">Soal 1 / 20</span>
+      <span id="timer">00:00</span>
+    </div>
+
+    <h3 id="soal"></h3>
+    <div id="opsi"></div>
+
+    <button onclick="next()">Soal Berikutnya</button>
+  </div>
+
 </div>
 
 <script src="script.js"></script>
