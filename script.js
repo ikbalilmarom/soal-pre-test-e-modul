@@ -1,5 +1,9 @@
-/* ================== KONFIGURASI ================== */
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzB3RhRKmCmMduSSHNTsa0kP7e8ZodHUyH_PSSAGXqfCpeVkn7Bm9QtlPl8--vPEHsO/exec";
+const WEB_APP = "https://script.google.com/macros/s/AKfycbzB3RhRKmCmMduSSHNTsa0kP7e8ZodHUyH_PSSAGXqfCpeVkn7Bm9QtlPl8--vPEHsO/exec";
+
+let soalIndex = 0;
+let benar = 0;
+let salah = 0;
+let jawabanDipilih = null;
 
 /* ================== DATA SOAL ================== */
 const soalData = [
@@ -165,83 +169,82 @@ const soalData = [
   }
 ];
 
-/* ================== VARIABEL ================== */
-let indexSoal = 0;
-let jawaban = [];
-let timer = 0;
-let interval;
-
-const pageI=document.getElementById("page-identitas");
-const pageQ=document.getElementById("page-kuis");
-const pageH=document.getElementById("page-hasil");
-const soalBox=document.getElementById("soal-box");
-
-document.getElementById("formIdentitas").onsubmit=e=>{
- e.preventDefault();
- pageI.classList.add("hidden");
- pageQ.classList.remove("hidden");
- mulaiTimer(); render();
-};
-
-function mulaiTimer(){
- interval=setInterval(()=>{
-  timer++;
-  timerEl.textContent=
-   String(Math.floor(timer/60)).padStart(2,"0")+":"+
-   String(timer%60).padStart(2,"0");
- },1000);
+function mulai() {
+  if (!nama.value || !kelas.value || !sekolah.value || !tanggal.value) {
+    alert("Lengkapi identitas!");
+    return;
+  }
+  document.getElementById("formAwal").classList.add("hidden");
+  document.getElementById("quiz").classList.remove("hidden");
+  tampilSoal();
 }
 
-function render(){
- progress.textContent=`Soal ${i+1} / 20`;
- const s=soalData[i];
- soalBox.innerHTML=`<h3>${i+1}. ${s.soal}</h3>`+
- ["A","B","C","D"].map(o=>`
-  <button class="opsi" onclick="pilih('${o}')">${o}. ${s[o]}</button>
- `).join("");
+function tampilSoal() {
+  const s = soalList[soalIndex];
+  document.getElementById("progress").innerText = `Soal ${soalIndex+1} / ${soalList.length}`;
+  document.getElementById("soal").innerText = s.soal;
+
+  const opsiDiv = document.getElementById("opsi");
+  opsiDiv.innerHTML = "";
+  jawabanDipilih = null;
+
+  s.opsi.forEach((o, i) => {
+    const div = document.createElement("div");
+    div.className = "opsi";
+    div.innerText = o;
+    div.onclick = () => jawabanDipilih = i;
+    opsiDiv.appendChild(div);
+  });
 }
 
-function pilih(p){
- jawaban[i]=p;
- document.querySelectorAll(".opsi").forEach(b=>{
-  b.disabled=true;
-  if(b.textContent.startsWith(soalData[i].kunci)) b.classList.add("benar");
-  if(b.textContent.startsWith(p)&&p!==soalData[i].kunci) b.classList.add("salah");
- });
+async function next() {
+  if (jawabanDipilih === null) {
+    alert("Pilih jawaban!");
+    return;
+  }
+
+  if (jawabanDipilih === soalList[soalIndex].kunci) benar++;
+  else salah++;
+
+  soalIndex++;
+
+  if (soalIndex < soalList.length) tampilSoal();
+  else kirim();
 }
 
-btnNext.onclick=()=>{
- if(!jawaban[i]) return alert("Pilih jawaban terlebih dahulu");
- i++;
- i<soalData.length?render():selesai();
-};
+async function kirim() {
+  document.getElementById("loading").style.display = "flex";
 
-function selesai(){
- clearInterval(interval);
- pageQ.classList.add("hidden");
- pageH.classList.remove("hidden");
- let benar=jawaban.filter((j,x)=>j===soalData[x].kunci).length;
- rNama.textContent=nama.value;
- rKelas.textContent=kelas.value;
- rSekolah.textContent=sekolah.value;
- rSubmit.textContent=submit.value;
- rBenar.textContent=benar;
- rSalah.textContent=20-benar;
- rSkor.textContent=benar*5;
- btnKirim.onclick=()=>kirim(benar,20-benar,benar*5);
+  const data = new URLSearchParams({
+    nama: nama.value,
+    kelas: kelas.value,
+    sekolah: sekolah.value,
+    submit: tanggal.value,
+    benar: benar,
+    salah: salah,
+    skor: benar * 5
+  });
+
+  try {
+    await fetch(WEB_APP, {
+      method: "POST",
+      body: data
+    });
+
+    showPopup("Berhasil!", "Jawaban berhasil dikirim.");
+  } catch (e) {
+    showPopup("Gagal", "Terjadi kesalahan pengiriman.");
+  } finally {
+    document.getElementById("loading").style.display = "none";
+  }
 }
 
-function kirim(benar,salah,skor){
- overlay.classList.remove("hidden");
- popupText.textContent="Mengirim jawaban...";
- fetch(WEB_APP_URL,{
-  method:"POST",
-  body:JSON.stringify({nama:nama.value,kelas:kelas.value,sekolah:sekolah.value,submit:submit.value,benar,salah,skor})
- }).then(()=>{
-  popupText.textContent="✅ Jawaban berhasil dikirim";
-  setTimeout(()=>overlay.classList.add("hidden"),1800);
- }).catch(()=>{
-  popupText.textContent="❌ Gagal mengirim data";
-  setTimeout(()=>overlay.classList.add("hidden"),2000);
- });
+function showPopup(title, msg) {
+  document.getElementById("popup-title").innerText = title;
+  document.getElementById("popup-message").innerText = msg;
+  document.getElementById("popup").style.display = "flex";
+}
+
+function closePopup() {
+  document.getElementById("popup").style.display = "none";
 }
